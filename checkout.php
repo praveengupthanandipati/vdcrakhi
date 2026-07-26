@@ -1,5 +1,6 @@
 <?php
 require __DIR__ . '/data.php';
+require __DIR__ . '/order-mailer.php';
 
 $id      = (int) ($_GET['id'] ?? $_POST['id'] ?? 0);
 $product = getProductById($products, $id);
@@ -49,6 +50,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!$errors) {
         $subtotal = $product['offer_price'] * $qty;
         $total    = $subtotal + SHIPPING_FEE;
+
+        $order = array_merge($f, [
+            'number'       => 'VDC-' . date('Ymd') . '-' . strtoupper(bin2hex(random_bytes(3))),
+            'date'         => date('d M Y, h:i A'),
+            'customer_name'=> $f['first_name'] . ' ' . $f['last_name'],
+            'product_name' => $product['name'],
+            'unit_price'   => (float) $product['offer_price'],
+            'qty'          => $qty,
+            'subtotal'     => (float) $subtotal,
+            'shipping_fee' => (float) SHIPPING_FEE,
+            'total'        => (float) $total,
+        ]);
+
+        sendOrderEmails($order);
         header('Location: ' . RAZORPAY_LINK . '?amount=' . $total);
         exit;
     }
