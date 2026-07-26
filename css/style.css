@@ -275,3 +275,33 @@ a { text-decoration: none; }
 @media (max-width: 767.98px) {
   .hero-slide { min-height: 48vh; }
 }
+
+@media print {
+  body {
+    background: #fff;
+    color: #000;
+  }
+
+  .top-bar,
+  .site-navbar,
+  .breadcrumb-bar,
+  .site-footer,
+  .btn,
+  .text-center .btn {
+    display: none !important;
+  }
+
+  .card {
+    box-shadow: none !important;
+    border: 1px solid #ddd !important;
+  }
+
+  .wrap {
+    width: 100%;
+    max-width: none;
+  }
+
+  .py-5 {
+    padding: 0 !important;
+  }
+}

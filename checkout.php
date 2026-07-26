@@ -13,6 +13,9 @@ if (!$product) {
 $qty = max(1, min(10, (int) ($_POST['qty'] ?? $_GET['qty'] ?? 1)));
 
 $errors = [];
+$paymentReady = false;
+$paymentOptions = [];
+$savedOrder = null;
 $f = [
     'first_name' => '', 'last_name' => '', 'company' => '', 'country' => 'India',
     'street_address' => '', 'apartment' => '', 'city' => '', 'state' => '', 'pin_code' => '',
@@ -51,21 +54,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $subtotal = $product['offer_price'] * $qty;
         $total    = $subtotal + SHIPPING_FEE;
 
-        $order = array_merge($f, [
-            'number'       => 'VDC-' . date('Ymd') . '-' . strtoupper(bin2hex(random_bytes(3))),
-            'date'         => date('d M Y, h:i A'),
-            'customer_name'=> $f['first_name'] . ' ' . $f['last_name'],
-            'product_name' => $product['name'],
-            'unit_price'   => (float) $product['offer_price'],
-            'qty'          => $qty,
-            'subtotal'     => (float) $subtotal,
-            'shipping_fee' => (float) SHIPPING_FEE,
-            'total'        => (float) $total,
-        ]);
+        try {
+            $savedOrder = saveOrderToDatabase($f, $product, $qty, $subtotal, $total);
+            $razorpayOrder = createRazorpayOrder($savedOrder['id'], $savedOrder['order_number'], $total);
 
-        sendOrderEmails($order);
-        header('Location: ' . RAZORPAY_LINK . '?amount=' . $total);
-        exit;
+            $order = array_merge($f, [
+                'number'        => $savedOrder['order_number'],
+                'date'          => date('d M Y, h:i A'),
+                'customer_name' => $f['first_name'] . ' ' . $f['last_name'],
+                'product_name'  => $product['name'],
+                'unit_price'    => (float) $product['offer_price'],
+                'qty'           => $qty,
+                'subtotal'      => (float) $subtotal,
+                'shipping_fee'  => (float) SHIPPING_FEE,
+                'total'         => (float) $total,
+            ]);
+            sendOrderEmails($order);
+
+            $paymentReady = true;
+            $paymentOptions = [
+                'key' => RAZORPAY_KEY_ID,
+                'amount' => (int) $razorpayOrder['amount'],
+                'currency' => $razorpayOrder['currency'],
+                'name' => 'Vdesiconnect',
+                'description' => $product['name'],
+                'order_id' => $razorpayOrder['id'],
+                'prefill' => [
+                    'name' => $f['first_name'] . ' ' . $f['last_name'],
+                    'email' => $f['email'],
+                    'contact' => $f['phone'],
+                ],
+                'notes' => [
+                    'order_id' => (string) $savedOrder['id'],
+                ],
+                'theme' => [
+                    'color' => '#8b1e3f',
+                ],
+            ];
+        } catch (Throwable $e) {
+            $errors['database'] = 'We could not start the payment right now. Please try again.';
+        }
     }
 }
 
@@ -87,7 +115,13 @@ require __DIR__ . '/components/header.php';
 <section class="py-5">
   <div class="wrap">
     <?php if ($errors): ?>
-      <div class="alert alert-danger" role="alert">Please fix the highlighted fields below and try again.</div>
+      <div class="alert alert-danger" role="alert">
+        <?php if (isset($errors['database'])): ?>
+          <?= htmlspecialchars($errors['database']) ?>
+        <?php else: ?>
+          Please fix the highlighted fields below and try again.
+        <?php endif; ?>
+      </div>
     <?php endif; ?>
 
     <form id="checkoutForm" method="post" action="checkout.php?id=<?= $product['id'] ?>" novalidate>
@@ -227,12 +261,50 @@ require __DIR__ . '/components/header.php';
 
             <p class="small text-muted mt-3">Your personal data will be used to process your order, support your experience throughout this website, and for other purposes described in our <a href="#">privacy policy</a>.</p>
 
-            <button type="submit" class="btn btn-maroon btn-lg w-100 mt-2">Place Order</button>
+            <?php if ($paymentReady): ?>
+              <div class="alert alert-info small mt-2" role="alert">A Razorpay payment window will open shortly. If it does not appear, use the button below.</div>
+              <button type="button" id="payNowBtn" class="btn btn-maroon btn-lg w-100 mt-2">Pay Now</button>
+            <?php else: ?>
+              <button type="submit" class="btn btn-maroon btn-lg w-100 mt-2">Place Order</button>
+            <?php endif; ?>
           </div>
         </div>
       </div>
     </form>
   </div>
 </section>
+
+<?php if ($paymentReady): ?>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const options = <?= json_encode($paymentOptions, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) ?>;
+    const rzp = new Razorpay({
+      ...options,
+      handler: function (response) {
+        window.location.href = 'order-success.php?order_id=<?= (int) ($savedOrder['id'] ?? 0) ?>&status=success&payment_id=' + encodeURIComponent(response.razorpay_payment_id || '');
+      },
+      modal: {
+        ondismiss: function () {
+          window.location.href = 'order-success.php?order_id=<?= (int) ($savedOrder['id'] ?? 0) ?>&status=failed';
+        }
+      }
+    });
+
+    rzp.on('payment.failed', function (response) {
+      window.location.href = 'order-success.php?order_id=<?= (int) ($savedOrder['id'] ?? 0) ?>&status=failed&payment_id=' + encodeURIComponent(response.error.metadata.payment_id || '');
+    });
+
+    const payNowBtn = document.getElementById('payNowBtn');
+    if (payNowBtn) {
+      payNowBtn.addEventListener('click', function () {
+        rzp.open();
+      });
+    }
+
+    rzp.open();
+  });
+</script>
+<?php endif; ?>
 
 <?php require __DIR__ . '/components/footer.php'; ?>
