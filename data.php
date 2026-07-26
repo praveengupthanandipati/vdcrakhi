@@ -61,16 +61,21 @@ function formatPrice($amount) {
     return '₹' . number_format((float) $amount, 0);
 }
 
+// define('RAZORPAY_LINK', '');
+// define('RAZORPAY_KEY_ID', '');
+// define('RAZORPAY_KEY_SECRET', '');
+
 define('RAZORPAY_LINK', 'https://razorpay.me/@elitemart4120');
 define('RAZORPAY_KEY_ID', 'rzp_test_TFqDGMRwEytZqP');
 define('RAZORPAY_KEY_SECRET', 'AJAn4LJKAQ7fHC0KVfKg3n63');
+
 define('SHIPPING_FEE', 45);
 define('DB_HOST', 'localhost');
 define('DB_NAME', 'vdcrakhi');
-define('DB_USER', 'root');
-define('DB_PASS', '');
-define('ADMIN_EMAIL', 'admin@vdcrakhi.com');
-define('MAIL_FROM_EMAIL', 'no-reply@vdcrakhi.com');
+define('DB_USER', 'vdcrakhi');
+define('DB_PASS', 'vdcrakhi@2026');
+define('ADMIN_EMAIL', 'eliteagrofoods2024@gmail.com');
+define('MAIL_FROM_EMAIL', 'info@elitemart.co.in');
 define('MAIL_FROM_NAME', 'Vdesiconnect');
 
 function createRazorpayOrder(int $orderId, string $orderNumber, float $amount): array
