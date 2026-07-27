@@ -12,12 +12,12 @@ $env = static function (string $name, string $default = ''): string {
 };
 
 $config = [
-    'smtp_host'       => $env('SMTP_HOST', 'elitemart.co.in'),
+    'smtp_host'       => $env('SMTP_HOST', 'smtpout.secureserver.net'),
     'smtp_port'       => (int) $env('SMTP_PORT', '465'),
     'smtp_encryption' => strtolower($env('SMTP_ENCRYPTION', 'ssl')),
-    'smtp_username'   => $env('SMTP_USERNAME', 'rakhis@elitemart.co.in'),
-    'smtp_password'   => $env('SMTP_PASSWORD', 'rakhis@elitemart.co.in'),
-    'mail_from'       => $env('MAIL_FROM', 'rakhis@elitemart.co.in'),
+    'smtp_username'   => $env('SMTP_USERNAME', 'rakhis@vdesiconnect.com'),
+    'smtp_password'   => $env('SMTP_PASSWORD', ''),
+    'mail_from'       => $env('MAIL_FROM', 'rakhis@vdesiconnect.com'),
     'mail_from_name'  => $env('MAIL_FROM_NAME', 'Vdesiconnect'),
     'admin_email'     => $env('ADMIN_EMAIL', 'rakhis@elitemart.co.in'),
 ];

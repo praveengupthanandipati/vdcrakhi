@@ -93,6 +93,10 @@ function buildAdminOrderEmail(array $order): string
         ? '<p><strong>Order notes:</strong><br>' . nl2br(mailEscape($order['order_notes'])) . '</p>'
         : '';
 
+    $referral = !empty($order['referral_code'])
+        ? '<p><strong>Referral code:</strong> ' . mailEscape($order['referral_code']) . '</p>'
+        : '';
+
     return '<!doctype html><html lang="en"><body style="font-family:Arial,sans-serif;color:#2b2424">'
         . '<div style="max-width:700px;margin:auto;border:1px solid #ddd;border-radius:12px;overflow:hidden">'
         . '<div style="background:#7b1831;color:#fff;padding:22px"><h2 style="margin:0">New order ' . mailEscape($order['number']) . '</h2></div>'
@@ -100,7 +104,7 @@ function buildAdminOrderEmail(array $order): string
         . '<strong>Email:</strong> ' . mailEscape($order['email']) . '<br><strong>Phone:</strong> ' . mailEscape($order['phone']) . '</p>'
         . '<p><strong>Item:</strong> ' . mailEscape($order['product_name']) . ' &times; ' . (int) $order['qty'] . '<br>'
         . '<strong>Order total:</strong> ' . formatMailPrice($order['total']) . '<br><strong>Payment:</strong> Pending Razorpay payment</p>'
-        . $notes . '<p>The full invoice with billing and shipping addresses is attached.</p></div></div>'
+        . $referral . $notes . '<p>The full invoice with billing and shipping addresses is attached.</p></div></div>'
         . '</body></html>';
 }
 

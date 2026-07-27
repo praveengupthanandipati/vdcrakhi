@@ -45,15 +45,36 @@ $activePage = $activePage ?? '';
     <a class="navbar-brand" href="index.php">
       <img src="img/logo.png" alt="Vdesiconnect logo" height="48">
     </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-label="Toggle navigation">
+    <span id="navLoader" class="nav-loader" aria-hidden="true"></span>
+    <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="offcanvas" data-bs-target="#mainNav" aria-controls="mainNav" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="mainNav">
-      <ul class="navbar-nav ms-lg-auto">
-        <li class="nav-item"><a class="nav-link <?= $activePage === 'home' ? 'active' : '' ?>" href="index.php">Home</a></li>
-        <li class="nav-item"><a class="nav-link <?= $activePage === 'products' ? 'active' : '' ?>" href="product-list.php">All Rakhis</a></li>
-        <li class="nav-item"><a class="nav-link <?= $activePage === 'contact' ? 'active' : '' ?>" href="contact.php">Contact</a></li>
-      </ul>
+    <div class="offcanvas offcanvas-end site-nav-offcanvas" tabindex="-1" id="mainNav" aria-labelledby="mainNavLabel">
+      <div class="offcanvas-header">
+        <a class="navbar-brand m-0" href="index.php" id="mainNavLabel">
+          <img src="img/logo.png" alt="Vdesiconnect logo" height="40">
+        </a>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        <ul class="navbar-nav flex-grow-1">
+          <li class="nav-item"><a class="nav-link <?= $activePage === 'home' ? 'active' : '' ?>" href="index.php">Home</a></li>
+          <li class="nav-item"><a class="nav-link <?= $activePage === 'products' ? 'active' : '' ?>" href="product-list.php">All Rakhis</a></li>
+          <li class="nav-item"><a class="nav-link <?= $activePage === 'contact' ? 'active' : '' ?>" href="contact.php">Contact</a></li>
+        </ul>
+        <div class="site-nav-offcanvas-footer d-lg-none">
+          <p class="mb-1"><i class="bi bi-truck"></i>&nbsp; Free Shipping to India &amp; USA</p>
+          <p class="mb-0"><i class="bi bi-envelope"></i>&nbsp; support@vdesiconnect.com</p>
+        </div>
+      </div>
     </div>
   </div>
 </nav>
+<script>
+  window.addEventListener('load', function () {
+    var loader = document.getElementById('navLoader');
+    if (!loader) return;
+    loader.classList.add('nav-loader-hidden');
+    loader.addEventListener('transitionend', function () { loader.remove(); }, { once: true });
+  });
+</script>
