@@ -74,8 +74,8 @@ define('DB_HOST', 'localhost');
 define('DB_NAME', 'vdcrakhi');
 define('DB_USER', 'vdcrakhi');
 define('DB_PASS', 'vdcrakhi@2026');
-define('ADMIN_EMAIL', 'eliteagrofoods2024@gmail.com');
-define('MAIL_FROM_EMAIL', 'info@elitemart.co.in');
+define('ADMIN_EMAIL', 'info@kpits.in');
+define('MAIL_FROM_EMAIL', 'rakhis@vdesiconnect.com');
 define('MAIL_FROM_NAME', 'Vdesiconnect');
 
 function createRazorpayOrder(int $orderId, string $orderNumber, float $amount): array
@@ -170,6 +170,7 @@ function getDbConnection(): PDO
         ship_state VARCHAR(100) DEFAULT NULL,
         ship_pin VARCHAR(20) DEFAULT NULL,
         order_notes TEXT DEFAULT NULL,
+        referral_code VARCHAR(20) DEFAULT NULL,
         total_amount DECIMAL(10,2) NOT NULL,
         status VARCHAR(30) NOT NULL DEFAULT 'pending',
         payment_id VARCHAR(100) DEFAULT NULL,
@@ -178,6 +179,12 @@ function getDbConnection(): PDO
 
     try {
         $pdo->exec("ALTER TABLE orders ADD COLUMN payment_id VARCHAR(100) DEFAULT NULL");
+    } catch (Throwable $e) {
+        // Ignore if the column already exists.
+    }
+
+    try {
+        $pdo->exec("ALTER TABLE orders ADD COLUMN referral_code VARCHAR(20) DEFAULT NULL");
     } catch (Throwable $e) {
         // Ignore if the column already exists.
     }
@@ -245,10 +252,10 @@ function saveOrderToDatabase(array $billingData, array $product, int $qty, float
 
     $stmt = $pdo->prepare("INSERT INTO orders (
         order_number, first_name, last_name, company, country, street_address, apartment, city, state, pin_code, phone, email,
-        ship_different, ship_address, ship_city, ship_state, ship_pin, order_notes, total_amount
+        ship_different, ship_address, ship_city, ship_state, ship_pin, order_notes, referral_code, total_amount
     ) VALUES (
         :order_number, :first_name, :last_name, :company, :country, :street_address, :apartment, :city, :state, :pin_code, :phone, :email,
-        :ship_different, :ship_address, :ship_city, :ship_state, :ship_pin, :order_notes, :total_amount
+        :ship_different, :ship_address, :ship_city, :ship_state, :ship_pin, :order_notes, :referral_code, :total_amount
     )");
 
     $stmt->execute([
@@ -270,6 +277,7 @@ function saveOrderToDatabase(array $billingData, array $product, int $qty, float
         ':ship_state' => $billingData['ship_different'] ? $billingData['ship_state'] : null,
         ':ship_pin' => $billingData['ship_different'] ? $billingData['ship_pin'] : null,
         ':order_notes' => $billingData['order_notes'],
+        ':referral_code' => $billingData['referral_code'] !== '' ? $billingData['referral_code'] : null,
         ':total_amount' => $total,
     ]);
 
