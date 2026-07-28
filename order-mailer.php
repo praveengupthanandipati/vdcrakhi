@@ -68,6 +68,79 @@ function buildInvoiceHtml(array $order): string
 </html>';
 }
 
+function pdfText(string $value): string
+{
+    $converted = iconv('UTF-8', 'Windows-1252//TRANSLIT//IGNORE', $value);
+    $value = $converted === false ? preg_replace('/[^\x20-\x7E]/', '', $value) : $converted;
+
+    return str_replace(['\\', '(', ')'], ['\\\\', '\\(', '\\)'], $value);
+}
+
+function buildInvoicePdf(array $order): string
+{
+    $shippingAddress = $order['ship_different']
+        ? "{$order['ship_address']}, {$order['ship_city']}, {$order['ship_state']} {$order['ship_pin']}"
+        : "{$order['street_address']}"
+            . ($order['apartment'] !== '' ? ", {$order['apartment']}" : '')
+            . ", {$order['city']}, {$order['state']} {$order['pin_code']}";
+
+    $lines = [
+        'VDESICONNECT - INVOICE',
+        'Invoice: ' . $order['number'],
+        'Date: ' . $order['date'],
+        '',
+        'Bill to: ' . $order['customer_name'],
+        'Email: ' . $order['email'],
+        'Phone: ' . $order['phone'],
+        'Address: ' . $order['street_address'],
+        $order['city'] . ', ' . $order['state'] . ' ' . $order['pin_code'],
+        $order['country'],
+        '',
+        'Ship to: ' . $shippingAddress,
+        '',
+        'Item: ' . $order['product_name'],
+        'Quantity: ' . (int) $order['qty'],
+        'Unit price: INR ' . number_format((float) $order['unit_price'], 0),
+        'Subtotal: INR ' . number_format((float) $order['subtotal'], 0),
+        'Standard shipping: INR ' . number_format((float) $order['shipping_fee'], 0),
+        'TOTAL: INR ' . number_format((float) $order['total'], 0),
+        '',
+        'Payment status: Pending',
+    ];
+
+    $content = "BT\n/F1 12 Tf\n50 790 Td\n17 TL\n";
+    foreach ($lines as $line) {
+        $content .= '(' . pdfText($line) . ") Tj\nT*\n";
+    }
+    $content .= "ET\n";
+
+    $objects = [
+        '<< /Type /Catalog /Pages 2 0 R >>',
+        '<< /Type /Pages /Kids [3 0 R] /Count 1 >>',
+        '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>',
+        '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>',
+        '<< /Length ' . strlen($content) . " >>\nstream\n" . $content . 'endstream',
+    ];
+
+    $pdf = "%PDF-1.4\n";
+    $offsets = [0];
+    foreach ($objects as $number => $object) {
+        $offsets[] = strlen($pdf);
+        $pdf .= ($number + 1) . " 0 obj\n" . $object . "\nendobj\n";
+    }
+
+    $xrefOffset = strlen($pdf);
+    $pdf .= "xref\n0 " . (count($objects) + 1) . "\n";
+    $pdf .= "0000000000 65535 f \n";
+    foreach (array_slice($offsets, 1) as $offset) {
+        $pdf .= sprintf("%010d 00000 n \n", $offset);
+    }
+    $pdf .= 'trailer << /Size ' . (count($objects) + 1) . " /Root 1 0 R >>\n";
+    $pdf .= "startxref\n{$xrefOffset}\n%%EOF";
+
+    return $pdf;
+}
+
 function buildCustomerOrderEmail(array $order): string
 {
     return '<!doctype html><html lang="en"><body style="margin:0;background:#f7f2ed;font-family:Arial,sans-serif;color:#2b2424">'
@@ -81,7 +154,7 @@ function buildCustomerOrderEmail(array $order): string
         . '<strong>' . mailEscape($order['product_name']) . '</strong> &times; ' . (int) $order['qty']
         . '<span style="float:right;font-weight:bold">' . formatMailPrice($order['total']) . '</span><br>'
         . '<span style="color:#706767;font-size:13px">Includes standard shipping</span></div>'
-        . '<p>Your invoice is attached as an HTML file. You can open it in any browser and print or save it as PDF.</p>'
+        . '<p>Your invoice is attached as a PDF file.</p>'
         . '<p style="margin-bottom:0">Questions? Reply to this email and include your order number.</p>'
         . '</div><p style="text-align:center;color:#817676;font-size:12px">Vdesiconnect &bull; Raksha Bandhan gifts delivered with care</p>'
         . '</div></body></html>';
@@ -136,7 +209,7 @@ function sendSmtpHtml(
     string $toName,
     string $subject,
     string $html,
-    string $invoiceHtml,
+    string $invoicePdf,
     string $invoiceNumber
 ): void {
     if ($config['smtp_password'] === '') {
@@ -199,10 +272,10 @@ function sendSmtpHtml(
             . "Content-Transfer-Encoding: base64\r\n\r\n"
             . chunk_split(base64_encode($html))
             . '--' . $boundary . "\r\n"
-            . 'Content-Type: text/html; name="Invoice-' . $safeInvoiceNumber . ".html\"\r\n"
+            . 'Content-Type: application/pdf; name="Invoice-' . $safeInvoiceNumber . ".pdf\"\r\n"
             . "Content-Transfer-Encoding: base64\r\n"
-            . 'Content-Disposition: attachment; filename="Invoice-' . $safeInvoiceNumber . ".html\"\r\n\r\n"
-            . chunk_split(base64_encode($invoiceHtml))
+            . 'Content-Disposition: attachment; filename="Invoice-' . $safeInvoiceNumber . ".pdf\"\r\n\r\n"
+            . chunk_split(base64_encode($invoicePdf))
             . '--' . $boundary . "--\r\n";
 
         $message = preg_replace('/(?m)^\./', '..', $message);
@@ -221,7 +294,7 @@ function sendSmtpHtml(
 function sendOrderEmails(array $order): array
 {
     $config = require __DIR__ . '/config.php';
-    $invoice = buildInvoiceHtml($order);
+    $invoice = buildInvoicePdf($order);
     $results = ['customer' => false, 'admin' => false];
 
     try {
