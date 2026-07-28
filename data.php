@@ -1,7 +1,8 @@
 <?php
 /**
  * Single source of truth for the Rakhi catalog.
- * Generates 30 sample products across 6 categories with test images.
+ * Product data (category, name, mrp, offer_price, description) lives in
+ * products.json — edit that file to add/update/remove products.
  */
 
 $categories = [
@@ -12,42 +13,48 @@ $categories = [
     'return-gifts'  => 'Return Gift Sets',
     'combo'         => 'Combo Packs (Rakhi + Sweets)',
 ];
+$categorySlugsByLabel = array_flip($categories);
 
 // Loop over every rakhi*.jpg found in /img and cycle through them for the catalog
 $imageFiles = glob(__DIR__ . '/img/rakhi*.jpg');
 natsort($imageFiles);
 $productImages = array_map(fn($f) => 'img/' . basename($f), array_values($imageFiles));
 
-$names = [
-    'traditional'  => ['Royal Silk Rakhi', 'Classic Mauli Thread Rakhi', 'Traditional Kalash Rakhi', 'Zardosi Handcrafted Rakhi', 'Banarasi Silk Rakhi'],
-    'kids'         => ['Cartoon Character Rakhi', 'Chota Hero Kids Rakhi', 'Superhero Rakhi for Kids', 'Robo Toon Fun Rakhi', 'Cute Teddy Rakhi'],
-    'premium'      => ['Gold Plated Designer Rakhi', 'Kundan Stone Rakhi', 'Pearl Studded Premium Rakhi', 'American Diamond Rakhi', 'Meenakari Designer Rakhi'],
-    'eco'          => ['Rudraksha Eco Rakhi', 'Tulsi Bead Eco Rakhi', 'Sandalwood Eco Rakhi', 'Seed Plantable Rakhi', 'Jute Handmade Rakhi'],
-    'return-gifts' => ['Chocolate Return Gift Set', 'Scented Candle Gift Set', 'Photo Frame Return Gift', 'Keychain Combo Gift Set', 'Mug & Card Gift Set'],
-    'combo'        => ['Rakhi with Kaju Katli', 'Rakhi with Soan Papdi', 'Rakhi with Dry Fruits Box', 'Rakhi with Chocolate Box', 'Rakhi with Motichoor Ladoo'],
-];
+function slugifyCategory(string $label): string {
+    $slug = strtolower(trim(preg_replace('/[^a-z0-9]+/i', '-', $label), '-'));
+    return $slug !== '' ? $slug : 'general';
+}
+
+$productsRaw = json_decode(file_get_contents(__DIR__ . '/products.json'), true) ?: [];
 
 $products = [];
+$seenCategorySlugs = [];
 $id = 1;
-foreach ($names as $catKey => $items) {
-    foreach ($items as $i => $name) {
-        $price  = 499 + (($id * 37) % 1500);
-        $offer  = (int) round($price * (0.7 + (($id * 3) % 16) / 100));
-
-        $products[] = [
-            'id'             => $id,
-            'name'           => $name,
-            'category'       => $catKey,
-            'category_label' => $categories[$catKey],
-            'price'          => $price,
-            'offer_price'    => $offer,
-            'rating'         => round((38 + (($id * 7) % 13)) / 10, 1),
-            'image'          => $productImages[($id - 1) % count($productImages)],
-            'description'    => "A beautiful {$name}, handpicked for Raksha Bandhan celebrations. Crafted with love to express the special bond between brother and sister.",
-            'badge'          => $i === 0 ? 'Bestseller' : (($id % 7 === 0) ? 'New' : null),
-        ];
-        $id++;
+foreach ($productsRaw as $item) {
+    $label = $item['category'];
+    // Reuse the known slug for existing categories; auto-generate one for any
+    // new category name added to products.json so it works without code changes.
+    $slug = $categorySlugsByLabel[$label] ?? slugifyCategory($label);
+    if (!isset($categories[$slug])) {
+        $categories[$slug] = $label;
     }
+
+    $isFirstInCategory = !isset($seenCategorySlugs[$slug]);
+    $seenCategorySlugs[$slug] = true;
+
+    $products[] = [
+        'id'             => $id,
+        'name'           => $item['name'],
+        'category'       => $slug,
+        'category_label' => $label,
+        'price'          => $item['mrp'],
+        'offer_price'    => $item['offer_price'],
+        'rating'         => round((38 + (($id * 7) % 13)) / 10, 1),
+        'image'          => !empty($item['image']) ? $item['image'] : $productImages[($id - 1) % count($productImages)],
+        'description'    => $item['description'],
+        'badge'          => $isFirstInCategory ? 'Bestseller' : (($id % 7 === 0) ? 'New' : null),
+    ];
+    $id++;
 }
 
 function getProductById(array $products, $id) {

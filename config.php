@@ -12,7 +12,7 @@ $env = static function (string $name, string $default = ''): string {
 };
 
 $config = [
-    'smtp_host'       => $env('SMTP_HOST', 'elitemart.co.in'),
+    'smtp_host'       => $env('SMTP_HOST', 'smtp.gmail.com'),
     'smtp_port'       => (int) $env('SMTP_PORT', '465'),
     'smtp_encryption' => strtolower($env('SMTP_ENCRYPTION', 'ssl')),
     'smtp_username'   => $env('SMTP_USERNAME', 'rakhis@elitemart.co.in'),
@@ -27,7 +27,7 @@ if (is_file($localConfigFile)) {
     $localConfig = require $localConfigFile;
     if (is_array($localConfig)) {
         $config = array_replace($config, $localConfig);
-    }
+        }
 }
 
 return $config;
