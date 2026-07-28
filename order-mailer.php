@@ -212,8 +212,9 @@ function sendSmtpHtml(
     string $invoicePdf,
     string $invoiceNumber
 ): void {
-    if ($config['smtp_password'] === '') {
-        throw new RuntimeException('SMTP_PASSWORD is not configured.');
+    $smtpAuth = $config['smtp_auth'] ?? true;
+    if ($smtpAuth && ($config['smtp_username'] === '' || $config['smtp_password'] === '')) {
+        throw new RuntimeException('SMTP authentication is enabled, but SMTP_USERNAME or SMTP_PASSWORD is not configured.');
     }
 
     $transport = $config['smtp_encryption'] === 'ssl' ? 'ssl://' : '';
@@ -247,9 +248,11 @@ function sendSmtpHtml(
             smtpCommand($socket, 'EHLO ' . $hostname, [250]);
         }
 
-        smtpCommand($socket, 'AUTH LOGIN', [334]);
-        smtpCommand($socket, base64_encode($config['smtp_username']), [334]);
-        smtpCommand($socket, base64_encode($config['smtp_password']), [235]);
+        if ($smtpAuth) {
+            smtpCommand($socket, 'AUTH LOGIN', [334]);
+            smtpCommand($socket, base64_encode($config['smtp_username']), [334]);
+            smtpCommand($socket, base64_encode($config['smtp_password']), [235]);
+        }
         smtpCommand($socket, 'MAIL FROM:<' . $config['mail_from'] . '>', [250]);
         smtpCommand($socket, 'RCPT TO:<' . $to . '>', [250, 251]);
         smtpCommand($socket, 'DATA', [354]);
@@ -291,6 +294,30 @@ function sendSmtpHtml(
     }
 }
 
+function logOrderEmailError(string $recipientType, array $order, array $config, Throwable $error): void
+{
+    $details = [
+        'time' => date(DATE_ATOM),
+        'recipient' => $recipientType,
+        'order' => $order['number'] ?? 'unknown',
+        'smtp_host' => $config['smtp_host'] ?? '',
+        'smtp_port' => $config['smtp_port'] ?? '',
+        'smtp_encryption' => $config['smtp_encryption'] ?? '',
+        'smtp_auth' => ($config['smtp_auth'] ?? true) ? 'true' : 'false',
+        'smtp_username_configured' => !empty($config['smtp_username']) ? 'true' : 'false',
+        'smtp_password_configured' => !empty($config['smtp_password']) ? 'true' : 'false',
+        'openssl_loaded' => extension_loaded('openssl') ? 'true' : 'false',
+        'error' => str_replace(["\r", "\n"], ' ', $error->getMessage()),
+    ];
+
+    $message = json_encode($details, JSON_UNESCAPED_SLASHES) . PHP_EOL;
+    $logFile = __DIR__ . '/email-errors.log';
+
+    if (@error_log($message, 3, $logFile) === false) {
+        error_log('Order email failure: ' . $message);
+    }
+}
+
 function sendOrderEmails(array $order): array
 {
     $config = require __DIR__ . '/config.php';
@@ -309,7 +336,7 @@ function sendOrderEmails(array $order): array
         );
         $results['customer'] = true;
     } catch (Throwable $error) {
-        error_log('Customer order email failed for ' . $order['number'] . ': ' . $error->getMessage());
+        logOrderEmailError('customer', $order, $config, $error);
     }
 
     try {
@@ -324,7 +351,7 @@ function sendOrderEmails(array $order): array
         );
         $results['admin'] = true;
     } catch (Throwable $error) {
-        error_log('Admin order email failed for ' . $order['number'] . ': ' . $error->getMessage());
+        logOrderEmailError('admin', $order, $config, $error);
     }
 
     return $results;

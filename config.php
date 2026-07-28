@@ -2,21 +2,35 @@
 /**
  * Runtime configuration.
  *
- * Keep secrets in server environment variables or config.local.php. The local
- * file is intentionally ignored by Git and may return an array overriding any
- * of the values below.
+ * Keep secrets in server environment variables, .env, or config.local.php.
+ * Local secret files are intentionally ignored by Git.
  */
-$env = static function (string $name, string $default = ''): string {
+$dotenvFile = __DIR__ . '/.env';
+$dotenv = is_file($dotenvFile)
+    ? (parse_ini_file($dotenvFile, false, INI_SCANNER_RAW) ?: [])
+    : [];
+
+$env = static function (string $name, string $default = '') use ($dotenv): string {
     $value = getenv($name);
-    return $value === false ? $default : $value;
+    if ($value !== false) {
+        return $value;
+    }
+
+    return array_key_exists($name, $dotenv) ? (string) $dotenv[$name] : $default;
+};
+
+$envBool = static function (string $name, bool $default = true) use ($env): bool {
+    $value = $env($name, $default ? 'true' : 'false');
+    return filter_var($value, FILTER_VALIDATE_BOOLEAN);
 };
 
 $config = [
     'smtp_host'       => $env('SMTP_HOST', 'smtp.gmail.com'),
     'smtp_port'       => (int) $env('SMTP_PORT', '587'),
     'smtp_encryption' => strtolower($env('SMTP_ENCRYPTION', 'tls')),
+    'smtp_auth'       => $envBool('SMTP_AUTH', true),
     'smtp_username'   => $env('SMTP_USERNAME', 'rakhis@elitemart.co.in'),
-    'smtp_password'   => $env('SMTP_PASSWORD', 'jvaf detq aegt tnei'),
+    'smtp_password'   => $env('SMTP_PASSWORD', ''),
     'mail_from'       => $env('MAIL_FROM', 'rakhis@elitemart.co.in'),
     'mail_from_name'  => $env('MAIL_FROM_NAME', 'Vdesiconnect'),
     'admin_email'     => $env('ADMIN_EMAIL', 'rakhis@elitemart.co.in'),
