@@ -13,8 +13,8 @@ $env = static function (string $name, string $default = ''): string {
 
 $config = [
     'smtp_host'       => $env('SMTP_HOST', 'smtp.gmail.com'),
-    'smtp_port'       => (int) $env('SMTP_PORT', '465'),
-    'smtp_encryption' => strtolower($env('SMTP_ENCRYPTION', 'ssl')),
+    'smtp_port'       => (int) $env('SMTP_PORT', '587'),
+    'smtp_encryption' => strtolower($env('SMTP_ENCRYPTION', 'tls')),
     'smtp_username'   => $env('SMTP_USERNAME', 'rakhis@elitemart.co.in'),
     'smtp_password'   => $env('SMTP_PASSWORD', 'jvaf detq aegt tnei'),
     'mail_from'       => $env('MAIL_FROM', 'rakhis@elitemart.co.in'),
