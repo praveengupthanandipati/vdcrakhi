@@ -1,0 +1,242 @@
+[
+    {
+        "category": "Traditional Rakhis",
+        "name": "Royal Silk Rakhi",
+        "mrp": 536,
+        "offer_price": 391,
+        "description": "A beautiful Royal Silk Rakhi, handpicked for Raksha Bandhan celebrations. Crafted with love to express the special bond between brother and sister.",
+        "image": "img/rakhi01.jpg"
+    },
+    {
+        "category": "Traditional Rakhis",
+        "name": "Classic Mauli Thread Rakhi",
+        "mrp": 573,
+        "offer_price": 435,
+        "description": "A beautiful Classic Mauli Thread Rakhi, handpicked for Raksha Bandhan celebrations. Crafted with love to express the special bond between brother and sister.",
+        "image": "img/rakhi02.jpg"
+    },
+    {
+        "category": "Traditional Rakhis",
+        "name": "Traditional Kalash Rakhi",
+        "mrp": 610,
+        "offer_price": 482,
+        "description": "A beautiful Traditional Kalash Rakhi, handpicked for Raksha Bandhan celebrations. Crafted with love to express the special bond between brother and sister.",
+        "image": "img/rakhi03.jpg"
+    },
+    {
+        "category": "Traditional Rakhis",
+        "name": "Zardosi Handcrafted Rakhi",
+        "mrp": 647,
+        "offer_price": 531,
+        "description": "A beautiful Zardosi Handcrafted Rakhi, handpicked for Raksha Bandhan celebrations. Crafted with love to express the special bond between brother and sister.",
+        "image": "img/rakhi04.jpg"
+    },
+    {
+        "category": "Traditional Rakhis",
+        "name": "Banarasi Silk Rakhi",
+        "mrp": 684,
+        "offer_price": 581,
+        "description": "A beautiful Banarasi Silk Rakhi, handpicked for Raksha Bandhan celebrations. Crafted with love to express the special bond between brother and sister.",
+        "image": "img/rakhi05.jpg"
+    },
+    {
+        "category": "Kids Rakhis",
+        "name": "Cartoon Character Rakhi",
+        "mrp": 721,
+        "offer_price": 519,
+        "description": "A beautiful Cartoon Character Rakhi, handpicked for Raksha Bandhan celebrations. Crafted with love to express the special bond between brother and sister.",
+        "image": "img/rakhi06.jpg"
+    },
+    {
+        "category": "Kids Rakhis",
+        "name": "Chota Hero Kids Rakhi",
+        "mrp": 758,
+        "offer_price": 569,
+        "description": "A beautiful Chota Hero Kids Rakhi, handpicked for Raksha Bandhan celebrations. Crafted with love to express the special bond between brother and sister.",
+        "image": "img/rakhi07.jpg"
+    },
+    {
+        "category": "Kids Rakhis",
+        "name": "Superhero Rakhi for Kids",
+        "mrp": 795,
+        "offer_price": 620,
+        "description": "A beautiful Superhero Rakhi for Kids, handpicked for Raksha Bandhan celebrations. Crafted with love to express the special bond between brother and sister.",
+        "image": "img/rakhi08.jpg"
+    },
+    {
+        "category": "Kids Rakhis",
+        "name": "Robo Toon Fun Rakhi",
+        "mrp": 832,
+        "offer_price": 674,
+        "description": "A beautiful Robo Toon Fun Rakhi, handpicked for Raksha Bandhan celebrations. Crafted with love to express the special bond between brother and sister.",
+        "image": "img/rakhi09.jpg"
+    },
+    {
+        "category": "Kids Rakhis",
+        "name": "Cute Teddy Rakhi",
+        "mrp": 869,
+        "offer_price": 730,
+        "description": "A beautiful Cute Teddy Rakhi, handpicked for Raksha Bandhan celebrations. Crafted with love to express the special bond between brother and sister.",
+        "image": "img/rakhi1.jpg"
+    },
+    {
+        "category": "Premium & Designer Rakhis",
+        "name": "Gold Plated Designer Rakhi",
+        "mrp": 906,
+        "offer_price": 643,
+        "description": "A beautiful Gold Plated Designer Rakhi, handpicked for Raksha Bandhan celebrations. Crafted with love to express the special bond between brother and sister.",
+        "image": "img/rakhi10.jpg"
+    },
+    {
+        "category": "Premium & Designer Rakhis",
+        "name": "Kundan Stone Rakhi",
+        "mrp": 943,
+        "offer_price": 698,
+        "description": "A beautiful Kundan Stone Rakhi, handpicked for Raksha Bandhan celebrations. Crafted with love to express the special bond between brother and sister.",
+        "image": "img/rakhi11.jpg"
+    },
+    {
+        "category": "Premium & Designer Rakhis",
+        "name": "Pearl Studded Premium Rakhi",
+        "mrp": 980,
+        "offer_price": 755,
+        "description": "A beautiful Pearl Studded Premium Rakhi, handpicked for Raksha Bandhan celebrations. Crafted with love to express the special bond between brother and sister.",
+        "image": "img/rakhi12.jpg"
+    },
+    {
+        "category": "Premium & Designer Rakhis",
+        "name": "American Diamond Rakhi",
+        "mrp": 1017,
+        "offer_price": 814,
+        "description": "A beautiful American Diamond Rakhi, handpicked for Raksha Bandhan celebrations. Crafted with love to express the special bond between brother and sister.",
+        "image": "img/rakhi13.jpg"
+    },
+    {
+        "category": "Premium & Designer Rakhis",
+        "name": "Meenakari Designer Rakhi",
+        "mrp": 1054,
+        "offer_price": 875,
+        "description": "A beautiful Meenakari Designer Rakhi, handpicked for Raksha Bandhan celebrations. Crafted with love to express the special bond between brother and sister.",
+        "image": "img/rakhi14.jpg"
+    },
+    {
+        "category": "Eco-Friendly Rakhis",
+        "name": "Rudraksha Eco Rakhi",
+        "mrp": 1091,
+        "offer_price": 764,
+        "description": "A beautiful Rudraksha Eco Rakhi, handpicked for Raksha Bandhan celebrations. Crafted with love to express the special bond between brother and sister.",
+        "image": "img/rakhi15.jpg"
+    },
+    {
+        "category": "Eco-Friendly Rakhis",
+        "name": "Tulsi Bead Eco Rakhi",
+        "mrp": 1128,
+        "offer_price": 823,
+        "description": "A beautiful Tulsi Bead Eco Rakhi, handpicked for Raksha Bandhan celebrations. Crafted with love to express the special bond between brother and sister.",
+        "image": "img/rakhi16.jpg"
+    },
+    {
+        "category": "Eco-Friendly Rakhis",
+        "name": "Sandalwood Eco Rakhi",
+        "mrp": 1165,
+        "offer_price": 885,
+        "description": "A beautiful Sandalwood Eco Rakhi, handpicked for Raksha Bandhan celebrations. Crafted with love to express the special bond between brother and sister.",
+        "image": "img/rakhi17.jpg"
+    },
+    {
+        "category": "Eco-Friendly Rakhis",
+        "name": "Seed Plantable Rakhi",
+        "mrp": 1202,
+        "offer_price": 950,
+        "description": "A beautiful Seed Plantable Rakhi, handpicked for Raksha Bandhan celebrations. Crafted with love to express the special bond between brother and sister.",
+        "image": "img/rakhi01.jpg"
+    },
+    {
+        "category": "Eco-Friendly Rakhis",
+        "name": "Jute Handmade Rakhi",
+        "mrp": 1239,
+        "offer_price": 1016,
+        "description": "A beautiful Jute Handmade Rakhi, handpicked for Raksha Bandhan celebrations. Crafted with love to express the special bond between brother and sister.",
+        "image": "img/rakhi02.jpg"
+    },
+    {
+        "category": "Return Gift Sets",
+        "name": "Chocolate Return Gift Set",
+        "mrp": 1276,
+        "offer_price": 1085,
+        "description": "A beautiful Chocolate Return Gift Set, handpicked for Raksha Bandhan celebrations. Crafted with love to express the special bond between brother and sister.",
+        "image": "img/rakhi03.jpg"
+    },
+    {
+        "category": "Return Gift Sets",
+        "name": "Scented Candle Gift Set",
+        "mrp": 1313,
+        "offer_price": 945,
+        "description": "A beautiful Scented Candle Gift Set, handpicked for Raksha Bandhan celebrations. Crafted with love to express the special bond between brother and sister.",
+        "image": "img/rakhi04.jpg"
+    },
+    {
+        "category": "Return Gift Sets",
+        "name": "Photo Frame Return Gift",
+        "mrp": 1350,
+        "offer_price": 1013,
+        "description": "A beautiful Photo Frame Return Gift, handpicked for Raksha Bandhan celebrations. Crafted with love to express the special bond between brother and sister.",
+        "image": "img/rakhi05.jpg"
+    },
+    {
+        "category": "Return Gift Sets",
+        "name": "Keychain Combo Gift Set",
+        "mrp": 1387,
+        "offer_price": 1082,
+        "description": "A beautiful Keychain Combo Gift Set, handpicked for Raksha Bandhan celebrations. Crafted with love to express the special bond between brother and sister.",
+        "image": "img/rakhi06.jpg"
+    },
+    {
+        "category": "Return Gift Sets",
+        "name": "Mug & Card Gift Set",
+        "mrp": 1424,
+        "offer_price": 1153,
+        "description": "A beautiful Mug & Card Gift Set, handpicked for Raksha Bandhan celebrations. Crafted with love to express the special bond between brother and sister.",
+        "image": "img/rakhi07.jpg"
+    },
+    {
+        "category": "Combo Packs (Rakhi + Sweets)",
+        "name": "Rakhi with Kaju Katli",
+        "mrp": 1461,
+        "offer_price": 1227,
+        "description": "A beautiful Rakhi with Kaju Katli, handpicked for Raksha Bandhan celebrations. Crafted with love to express the special bond between brother and sister.",
+        "image": "img/rakhi08.jpg"
+    },
+    {
+        "category": "Combo Packs (Rakhi + Sweets)",
+        "name": "Rakhi with Soan Papdi",
+        "mrp": 1498,
+        "offer_price": 1064,
+        "description": "A beautiful Rakhi with Soan Papdi, handpicked for Raksha Bandhan celebrations. Crafted with love to express the special bond between brother and sister.",
+        "image": "img/rakhi09.jpg"
+    },
+    {
+        "category": "Combo Packs (Rakhi + Sweets)",
+        "name": "Rakhi with Dry Fruits Box",
+        "mrp": 1535,
+        "offer_price": 1136,
+        "description": "A beautiful Rakhi with Dry Fruits Box, handpicked for Raksha Bandhan celebrations. Crafted with love to express the special bond between brother and sister.",
+        "image": "img/rakhi1.jpg"
+    },
+    {
+        "category": "Combo Packs (Rakhi + Sweets)",
+        "name": "Rakhi with Chocolate Box",
+        "mrp": 1572,
+        "offer_price": 1210,
+        "description": "A beautiful Rakhi with Chocolate Box, handpicked for Raksha Bandhan celebrations. Crafted with love to express the special bond between brother and sister.",
+        "image": "img/rakhi10.jpg"
+    },
+    {
+        "category": "Combo Packs (Rakhi + Sweets)",
+        "name": "Rakhi with Motichoor Ladoo",
+        "mrp": 1609,
+        "offer_price": 1287,
+        "description": "A beautiful Rakhi with Motichoor Ladoo, handpicked for Raksha Bandhan celebrations. Crafted with love to express the special bond between brother and sister.",
+        "image": "img/rakhi11.jpg"
+    }
+]
