@@ -1,5 +1,6 @@
 <?php
 require __DIR__ . '/data.php';
+require __DIR__ . '/order-mailer.php';
 
 $id      = (int) ($_GET['id'] ?? $_POST['id'] ?? 0);
 $product = getProductById($products, $id);
@@ -15,13 +16,19 @@ $errors = [];
 $paymentReady = false;
 $paymentOptions = [];
 $savedOrder = null;
+$emailResults = ['customer' => false, 'admin' => false];
 $f = [
     'first_name' => '', 'last_name' => '', 'company' => '', 'country' => 'India',
     'street_address' => '', 'apartment' => '', 'city' => '', 'state' => '', 'pin_code' => '',
     'phone' => '', 'email' => '', 'ship_different' => false,
     'ship_address' => '', 'ship_city' => '', 'ship_state' => '', 'ship_pin' => '',
-    'order_notes' => '',
+    'order_notes' => '', 'referral_code' => '',
 ];
+
+$referralCodes = [];
+for ($i = 10; $i <= 100; $i += 10) {
+    $referralCodes[] = sprintf('VDC%04d', $i);
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     foreach ($f as $key => $default) {
@@ -41,6 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!preg_match('/^[A-Za-z0-9\s\-]{3,10}$/', $f['pin_code'])) $errors['pin_code'] = 'Enter a valid PIN / ZIP code.';
     if (!preg_match('/^[0-9+\-\s()]{7,20}$/', $f['phone'])) $errors['phone'] = 'Enter a valid phone number.';
     if (!filter_var($f['email'], FILTER_VALIDATE_EMAIL)) $errors['email'] = 'Enter a valid email address.';
+    if ($f['referral_code'] !== '' && !in_array($f['referral_code'], $referralCodes, true)) $errors['referral_code'] = 'Please select a valid referral code.';
 
     if ($f['ship_different']) {
         if ($f['ship_address'] === '') $errors['ship_address'] = 'Shipping address is required.';
@@ -56,7 +64,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
             $savedOrder = saveOrderToDatabase($f, $product, $qty, $subtotal, $total);
             $razorpayOrder = createRazorpayOrder($savedOrder['id'], $savedOrder['order_number'], $total);
-            sendOrderNotificationEmail($f, $product, $qty, $subtotal, $total, $savedOrder['id']);
+
+            $order = array_merge($f, [
+                'number'        => $savedOrder['order_number'],
+                'date'          => date('d M Y, h:i A'),
+                'customer_name' => $f['first_name'] . ' ' . $f['last_name'],
+                'product_name'  => $product['name'],
+                'unit_price'    => (float) $product['offer_price'],
+                'qty'           => $qty,
+                'subtotal'      => (float) $subtotal,
+                'shipping_fee'  => (float) SHIPPING_FEE,
+                'total'         => (float) $total,
+            ]);
+            $emailResults = sendOrderEmails($order);
 
             $paymentReady = true;
             $paymentOptions = [
@@ -171,6 +191,16 @@ require __DIR__ . '/components/header.php';
               <input type="email" class="form-control <?= isset($errors['email']) ? 'is-invalid' : '' ?>" id="email" name="email" value="<?= htmlspecialchars($f['email']) ?>" required>
               <?php if (isset($errors['email'])): ?><div class="invalid-feedback"><?= $errors['email'] ?></div><?php endif; ?>
             </div>
+            <div class="col-12">
+              <label for="referral_code" class="form-label">Referral code (optional)</label>
+              <select class="form-select <?= isset($errors['referral_code']) ? 'is-invalid' : '' ?>" id="referral_code" name="referral_code">
+                <option value="" <?= $f['referral_code'] === '' ? 'selected' : '' ?>>No referral code</option>
+                <?php foreach ($referralCodes as $code): ?>
+                  <option value="<?= $code ?>" <?= $f['referral_code'] === $code ? 'selected' : '' ?>><?= $code ?></option>
+                <?php endforeach; ?>
+              </select>
+              <?php if (isset($errors['referral_code'])): ?><div class="invalid-feedback"><?= $errors['referral_code'] ?></div><?php endif; ?>
+            </div>
 
             <div class="col-12 mt-2">
               <div class="form-check">
@@ -250,6 +280,11 @@ require __DIR__ . '/components/header.php';
 
             <?php if ($paymentReady): ?>
               <div class="alert alert-info small mt-2" role="alert">A Razorpay payment window will open shortly. If it does not appear, use the button below.</div>
+              <?php if ($emailResults['customer']): ?>
+                <div class="alert alert-success small mt-2" role="alert"><i class="bi bi-envelope-check-fill"></i> A confirmation email with your order details has been sent to <?= htmlspecialchars($f['email']) ?>.</div>
+              <?php else: ?>
+                <div class="alert alert-warning small mt-2" role="alert"><i class="bi bi-exclamation-triangle-fill"></i> Your order was placed, but we couldn't send a confirmation email right now. Your order number is <strong><?= htmlspecialchars($savedOrder['order_number']) ?></strong> &mdash; please save it for reference.</div>
+              <?php endif; ?>
               <button type="button" id="payNowBtn" class="btn btn-maroon btn-lg w-100 mt-2">Pay Now</button>
             <?php else: ?>
               <button type="submit" class="btn btn-maroon btn-lg w-100 mt-2">Place Order</button>
