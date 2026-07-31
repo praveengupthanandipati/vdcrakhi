@@ -98,7 +98,6 @@ function initProductGrid() {
         <div class="body">
           <span class="cat">${p.category_label}</span>
           <h3><a href="product-detail.php?id=${p.id}" class="text-decoration-none text-dark">${p.name}</a></h3>
-          <div class="rating">${'★'.repeat(Math.round(p.rating / 2))}${'☆'.repeat(5 - Math.round(p.rating / 2))} <span class="text-muted">(${p.rating})</span></div>
           <div class="price-row">
             <span class="price-old">₹${p.price}</span>
             <span class="price-offer">₹${p.offer_price}</span>

@@ -14,8 +14,6 @@ $related = array_values(array_filter($products, fn($p) => $p['category'] === $pr
 $pageTitle  = $product['name'] . ' | Vdesiconnect';
 $activePage = 'detail';
 require __DIR__ . '/components/header.php';
-
-$stars = round($product['rating'] / 2);
 ?>
 
 <div class="breadcrumb-bar">
@@ -37,7 +35,6 @@ $stars = round($product['rating'] / 2);
         <span class="badge-soft"><?= $product['category_label'] ?></span>
         <?php if ($product['badge']): ?><span class="badge-soft ms-2"><?= $product['badge'] ?></span><?php endif; ?>
         <h1 class="font-display mt-3"><?= $product['name'] ?></h1>
-        <div class="stars mb-3"><?= str_repeat('★', $stars) . str_repeat('☆', 5 - $stars) ?> <span class="text-muted">(<?= $product['rating'] ?> / 5)</span></div>
         <div class="detail-price mb-3">
           <span class="price-old"><?= formatPrice($product['price']) ?></span>
           <span class="price-offer"><?= formatPrice($product['offer_price']) ?></span>

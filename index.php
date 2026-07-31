@@ -5,7 +5,7 @@ $activePage = 'home';
 require __DIR__ . '/components/header.php';
 
 $featured = $products;
-$gifts    = array_values(array_filter($products, fn($p) => in_array($p['category'], ['combo', 'return-gifts'])));
+$gifts    = array_values(array_filter($products, fn($p) => in_array($p['category'], ['rakhi-chocolate-india', 'rakhi-sweets-india', 'rakhi-nuts-india', 'rakhi-sweets-usa'])));
 
 $heroSlides = [
     [
@@ -70,7 +70,6 @@ $heroSlides = [
           <div class="body">
             <span class="cat"><?= $p['category_label'] ?></span>
             <h3><a href="product-detail.php?id=<?= $p['id'] ?>" class="text-decoration-none text-dark"><?= $p['name'] ?></a></h3>
-            <div class="rating">★★★★★ <span class="text-muted">(<?= $p['rating'] ?>)</span></div>
             <div class="price-row">
               <span class="price-old"><?= formatPrice($p['price']) ?></span>
               <span class="price-offer"><?= formatPrice($p['offer_price']) ?></span>
@@ -98,12 +97,14 @@ $heroSlides = [
     <div class="row g-4">
       <?php
       $icons = [
-          'traditional'  => 'bi-flower2',
-          'kids'         => 'bi-emoji-smile',
-          'premium'      => 'bi-gem',
-          'eco'          => 'bi-recycle',
-          'return-gifts' => 'bi-gift',
-          'combo'        => 'bi-basket3',
+          'single-rakhi-india'    => 'bi-flower2',
+          'multiple-rakhis-india' => 'bi-collection',
+          'rakhi-chocolate-india' => 'bi-gift',
+          'rakhi-sweets-india'    => 'bi-cup-straw',
+          'rakhi-nuts-india'      => 'bi-basket2',
+          'single-rakhi-usa'      => 'bi-flower3',
+          'multiple-rakhi-usa'    => 'bi-stack',
+          'rakhi-sweets-usa'      => 'bi-cup-hot',
       ];
       foreach ($categories as $key => $label): ?>
       <div class="col-6 col-md-4 col-lg-2" data-aos="zoom-in">
@@ -162,14 +163,14 @@ $heroSlides = [
             <span class="feature-icon"><i class="bi bi-brush"></i></span>
             <div>
               <h6>Handpicked Designs</h6>
-              <p>Traditional, kids, premium &amp; eco-friendly styles</p>
+              <p>Single &amp; multiple Rakhi packs, handpicked for you</p>
             </div>
           </div>
           <div class="feature-item">
             <span class="feature-icon"><i class="bi bi-gift"></i></span>
             <div>
               <h6>Combo Gift Packs</h6>
-              <p>Rakhis paired with sweets &amp; return gift sets</p>
+              <p>Rakhis paired with chocolates, sweets &amp; nuts</p>
             </div>
           </div>
           <div class="feature-item">

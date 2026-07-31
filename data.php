@@ -6,19 +6,26 @@
  */
 
 $categories = [
-    'traditional'   => 'Traditional Rakhis',
-    'kids'          => 'Kids Rakhis',
-    'premium'       => 'Premium & Designer Rakhis',
-    'eco'           => 'Eco-Friendly Rakhis',
-    'return-gifts'  => 'Return Gift Sets',
-    'combo'         => 'Combo Packs (Rakhi + Sweets)',
+    'single-rakhi-india'    => 'Single Rakhi to India',
+    'multiple-rakhis-india' => 'Multiple Rakhis to India',
+    'rakhi-chocolate-india' => 'Rakhi with Chocolate to India',
+    'rakhi-sweets-india'    => 'Rakhi with Sweets to India',
+    'rakhi-nuts-india'      => 'Rakhi with Nuts to India',
+    'single-rakhi-usa'      => 'Single Rakhi to Usa',
+    'multiple-rakhi-usa'    => 'Multiple Rakhi to Usa',
+    'rakhi-sweets-usa'      => 'Rakhi with Sweets to Usa',
 ];
 $categorySlugsByLabel = array_flip($categories);
 
-// Loop over every rakhi*.jpg found in /img and cycle through them for the catalog
-$imageFiles = glob(__DIR__ . '/img/rakhi*.jpg');
+// Loop over every product photo found in /img and cycle through them as a
+// fallback for any product that doesn't set its own "image" in products.json.
+$imageFiles = glob(__DIR__ . '/img/*.{jpg,jpeg,png}', GLOB_BRACE);
+$imageFiles = array_values(array_filter($imageFiles, fn($f) => !in_array(basename($f), ['logo.png', 'fav.png', 'placeholder.jpg'], true)));
 natsort($imageFiles);
 $productImages = array_map(fn($f) => 'img/' . basename($f), array_values($imageFiles));
+if (!$productImages) {
+    $productImages = ['img/placeholder.jpg'];
+}
 
 function slugifyCategory(string $label): string {
     $slug = strtolower(trim(preg_replace('/[^a-z0-9]+/i', '-', $label), '-'));
@@ -49,7 +56,7 @@ foreach ($productsRaw as $item) {
         'category_label' => $label,
         'price'          => $item['mrp'],
         'offer_price'    => $item['offer_price'],
-        'rating'         => round((38 + (($id * 7) % 13)) / 10, 1),
+        // 'rating'         => round((38 + (($id * 7) % 13)) / 10, 1),
         'image'          => !empty($item['image']) ? $item['image'] : $productImages[($id - 1) % count($productImages)],
         'description'    => $item['description'],
         'badge'          => $isFirstInCategory ? 'Bestseller' : (($id % 7 === 0) ? 'New' : null),
