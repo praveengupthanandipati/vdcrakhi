@@ -60,7 +60,9 @@ $activePage = $activePage ?? '';
         <ul class="navbar-nav flex-grow-1">
           <li class="nav-item"><a class="nav-link <?= $activePage === 'home' ? 'active' : '' ?>" href="index.php">Home</a></li>
           <li class="nav-item"><a class="nav-link <?= $activePage === 'products' ? 'active' : '' ?>" href="product-list.php">All Rakhis</a></li>
+          <li class="nav-item"><a class="nav-link <?= $activePage === 'order-status' ? 'active' : '' ?>" href="order-status.php">Order Status</a></li>
           <li class="nav-item"><a class="nav-link <?= $activePage === 'contact' ? 'active' : '' ?>" href="contact.php">Contact</a></li>
+          <li class="nav-item"><a class="nav-link" href="admin/login.php"><i class="bi bi-person-lock"></i> Login</a></li>
         </ul>
         <div class="site-nav-offcanvas-footer d-lg-none">
           <p class="mb-1"><i class="bi bi-truck"></i>&nbsp; Free Shipping to India &amp; USA</p>

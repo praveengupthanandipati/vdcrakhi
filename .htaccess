@@ -1,0 +1,14 @@
+DirectoryIndex index.php
+
+<IfModule mod_authz_core.c>
+  <FilesMatch "^(\.env|\.user\.ini|config\.local\.php|email-errors\.log|php-errors\.log)$">
+    Require all denied
+  </FilesMatch>
+</IfModule>
+
+<IfModule !mod_authz_core.c>
+  <FilesMatch "^(\.env|\.user\.ini|config\.local\.php|email-errors\.log|php-errors\.log)$">
+    Order allow,deny
+    Deny from all
+  </FilesMatch>
+</IfModule>

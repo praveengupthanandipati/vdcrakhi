@@ -12,6 +12,7 @@
         <h6>Quick Links</h6>
         <ul class="list-unstyled footer-links">
           <li><a href="faq.php">FAQ</a></li>
+          <li><a href="order-status.php">Order Status</a></li>
           <li><a href="contact.php">Contact Us</a></li>
         </ul>
       </div>

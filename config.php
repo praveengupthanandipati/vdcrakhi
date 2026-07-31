@@ -27,6 +27,7 @@ $envBool = static function (string $name, bool $default = true) use ($env): bool
 $config = [
     'smtp_host'       => $env('SMTP_HOST', 'smtp.gmail.com'),
     'smtp_port'       => (int) $env('SMTP_PORT', '587'),
+    'smtp_timeout'    => (int) $env('SMTP_TIMEOUT', '8'),
     'smtp_encryption' => strtolower($env('SMTP_ENCRYPTION', 'tls')),
     'smtp_auth'       => $envBool('SMTP_AUTH', true),
     'smtp_username'   => $env('SMTP_USERNAME', 'rakhis@elitemart.co.in'),
@@ -34,6 +35,8 @@ $config = [
     'mail_from'       => $env('MAIL_FROM', 'rakhis@elitemart.co.in'),
     'mail_from_name'  => $env('MAIL_FROM_NAME', 'Vdesiconnect'),
     'admin_email'     => $env('ADMIN_EMAIL', 'rakhis@elitemart.co.in'),
+    'admin_username'  => $env('ADMIN_USERNAME', 'admin'),
+    'admin_password'  => $env('ADMIN_PASSWORD', ''),
 ];
 
 $localConfigFile = __DIR__ . '/config.local.php';
