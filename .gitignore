@@ -1,3 +1,4 @@
 config.local.php
 email-errors.log
+php-errors.log
 .env

@@ -13,24 +13,103 @@
 
 * { box-sizing: border-box; }
 
-.nav-loader {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  margin-left: 14px;
-  border: 3px solid var(--accent-light);
-  border-top-color: var(--primary);
+/* ---------- WhatsApp floating button ---------- */
+.whatsapp-float {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  z-index: 1050;
+  width: 58px;
+  height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #25d366;
+  color: #fff;
   border-radius: 50%;
-  animation: nav-loader-spin 0.8s linear infinite;
-  transition: opacity 0.3s ease;
+  font-size: 1.8rem;
+  box-shadow: 0 6px 18px rgba(0,0,0,.25);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.whatsapp-float:hover {
+  color: #fff;
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 10px 22px rgba(0,0,0,.3);
+}
+@media (max-width: 575.98px) {
+  .whatsapp-float {
+    right: 16px;
+    bottom: 16px;
+    width: 52px;
+    height: 52px;
+    font-size: 1.6rem;
+  }
 }
 
-.nav-loader-hidden {
+/* ---------- Full-page loader ---------- */
+body.page-loading {
+  overflow: hidden;
+}
+.page-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 50% 40%, #33455a 0%, var(--navy) 55%, #182430 100%);
+  transition: opacity .45s ease, visibility .45s ease;
+}
+.page-loader-hidden {
   opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
 }
-
-@keyframes nav-loader-spin {
+.page-loader-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.1rem;
+  animation: page-loader-fade-in .6s ease both;
+}
+.page-loader-logo {
+  height: 56px;
+  width: auto;
+  filter: drop-shadow(0 4px 18px rgba(0,0,0,.35));
+  animation: page-loader-pulse 1.6s ease-in-out infinite;
+}
+.page-loader-ring {
+  position: relative;
+  display: inline-block;
+  width: 46px;
+  height: 46px;
+  border: 3px solid rgba(245,166,35,.22);
+  border-top-color: var(--accent);
+  border-right-color: var(--primary);
+  border-radius: 50%;
+  animation: page-loader-spin .9s linear infinite;
+}
+.page-loader-text {
+  margin: 0;
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  letter-spacing: .04em;
+  color: #f5e6c8;
+  opacity: .85;
+}
+@keyframes page-loader-spin {
   to { transform: rotate(360deg); }
+}
+@keyframes page-loader-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.06); opacity: .85; }
+}
+@keyframes page-loader-fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .page-loader-logo, .page-loader-ring, .page-loader-inner { animation: none; }
 }
 
 body {
@@ -52,7 +131,7 @@ a { text-decoration: none; }
      negative gutter margins bleed past it and cause page-wide horizontal
      overflow on narrow screens; clip it here instead of on body/html so
      the sticky navbar (an unrelated ancestor) keeps working. */
-  overflow-x: hidden;
+  /* overflow-x: hidden; */
 }
 
 /* ---------- Top bar ---------- */

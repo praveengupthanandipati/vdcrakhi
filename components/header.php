@@ -29,12 +29,21 @@ $activePage = $activePage ?? '';
 <link rel="stylesheet" href="css/style.css">
 <link rel="icon" href="img/fav.png" type="image/png">
 </head>
-<body>
+<body class="page-loading">
+
+<!-- Full-page loader -->
+<div id="pageLoader" class="page-loader" role="status" aria-label="Loading">
+  <div class="page-loader-inner">
+    <img src="img/logo.png" alt="" class="page-loader-logo">
+    <span class="page-loader-ring" aria-hidden="true"></span>
+    <p class="page-loader-text">Loading festive picks&hellip;</p>
+  </div>
+</div>
 
 <!-- Top ribbon -->
 <div class="top-bar d-none d-md-block">
   <div class="wrap d-flex justify-content-center align-items-center">
-    <span><i class="bi bi-truck"></i>&nbsp; Free Shipping to India &amp; USA on your first order</span>
+    Elite Mart Collaborates with Vdesiconnect to bring you a curated collection of Rakhis and gift sets, delivered across India & USA.
    
   </div>
 </div>
@@ -45,7 +54,6 @@ $activePage = $activePage ?? '';
     <a class="navbar-brand" href="index.php">
       <img src="img/logo.png" alt="Vdesiconnect logo" height="48">
     </a>
-    <span id="navLoader" class="nav-loader" aria-hidden="true"></span>
     <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="offcanvas" data-bs-target="#mainNav" aria-controls="mainNav" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -57,10 +65,12 @@ $activePage = $activePage ?? '';
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
       </div>
       <div class="offcanvas-body">
-        <ul class="navbar-nav flex-grow-1">
+        <ul class="navbar-nav ms-lg-auto align-items-lg-center">
           <li class="nav-item"><a class="nav-link <?= $activePage === 'home' ? 'active' : '' ?>" href="index.php">Home</a></li>
           <li class="nav-item"><a class="nav-link <?= $activePage === 'products' ? 'active' : '' ?>" href="product-list.php">All Rakhis</a></li>
+          <li class="nav-item"><a class="nav-link <?= $activePage === 'order-status' ? 'active' : '' ?>" href="order-status.php">Order Status</a></li>
           <li class="nav-item"><a class="nav-link <?= $activePage === 'contact' ? 'active' : '' ?>" href="contact.php">Contact</a></li>
+          
         </ul>
         <div class="site-nav-offcanvas-footer d-lg-none">
           <p class="mb-1"><i class="bi bi-truck"></i>&nbsp; Free Shipping to India &amp; USA</p>
@@ -71,10 +81,16 @@ $activePage = $activePage ?? '';
   </div>
 </nav>
 <script>
-  window.addEventListener('load', function () {
-    var loader = document.getElementById('navLoader');
+  (function () {
+    var loader = document.getElementById('pageLoader');
     if (!loader) return;
-    loader.classList.add('nav-loader-hidden');
-    loader.addEventListener('transitionend', function () { loader.remove(); }, { once: true });
-  });
+    var hide = function () {
+      document.body.classList.remove('page-loading');
+      loader.classList.add('page-loader-hidden');
+      loader.addEventListener('transitionend', function () { loader.remove(); }, { once: true });
+    };
+    window.addEventListener('load', hide);
+    // Safety net in case the load event is delayed by slow third-party assets.
+    setTimeout(hide, 4000);
+  })();
 </script>

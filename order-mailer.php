@@ -217,12 +217,13 @@ function sendSmtpHtml(
         throw new RuntimeException('SMTP authentication is enabled, but SMTP_USERNAME or SMTP_PASSWORD is not configured.');
     }
 
+    $timeout = max(3, min(15, (int) ($config['smtp_timeout'] ?? 8)));
     $transport = $config['smtp_encryption'] === 'ssl' ? 'ssl://' : '';
     $socket = @stream_socket_client(
         $transport . $config['smtp_host'] . ':' . $config['smtp_port'],
         $errorNumber,
         $errorMessage,
-        20,
+        $timeout,
         STREAM_CLIENT_CONNECT
     );
 
@@ -230,7 +231,7 @@ function sendSmtpHtml(
         throw new RuntimeException("Unable to connect to SMTP server: {$errorMessage} ({$errorNumber})");
     }
 
-    stream_set_timeout($socket, 20);
+    stream_set_timeout($socket, $timeout);
     try {
         [$code, $response] = smtpReadResponse($socket);
         if ($code !== 220) {

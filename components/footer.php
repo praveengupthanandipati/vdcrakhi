@@ -1,4 +1,9 @@
 <?php $extraScripts = $extraScripts ?? ''; ?>
+<!-- TODO: replace with the live WhatsApp business number -->
+<a href="https://wa.me/+919100311263" class="whatsapp-float" target="_blank" rel="noopener" aria-label="Chat with us on WhatsApp">
+  <i class="bi bi-whatsapp"></i>
+</a>
+
 <footer id="contact" class="site-footer">
   <div class="wrap py-5">
     <div class="row gy-4">
@@ -12,6 +17,7 @@
         <h6>Quick Links</h6>
         <ul class="list-unstyled footer-links">
           <li><a href="faq.php">FAQ</a></li>
+          <li><a href="order-status.php">Order Status</a></li>
           <li><a href="contact.php">Contact Us</a></li>
         </ul>
       </div>

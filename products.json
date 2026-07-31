@@ -45,7 +45,7 @@
         "mrp": 725,
         "offer_price": 625,
         "description": "4 Beautiful Handcrafted Rakhis",
-        "image": "img/placeholder.jpg"
+        "image": "img/VDCCURK5010.jpg"
     },
     {
         "category": "Multiple Rakhis to India",
@@ -53,7 +53,7 @@
         "mrp": 525,
         "offer_price": 425,
         "description": "3 Beautiful Handcrafted Rakhis  ",
-        "image": "img/placeholder.jpg"
+        "image": "img/VDCCURK5020.jpg"
     },
     {
         "category": "Rakhi with Chocolate to India",
@@ -61,7 +61,7 @@
         "mrp": 425,
         "offer_price": 320,
         "description": "1 Rakhi With Chocolate ",
-        "image": "img/placeholder.jpg"
+        "image": "img/VDCCURK3010.jpg"
     },
     {
         "category": "Rakhi with Sweets to India",
@@ -69,7 +69,7 @@
         "mrp": 600,
         "offer_price": 500,
         "description": "1 Rakhi With 250grams Sweets ",
-        "image": "img/placeholder.jpg"
+        "image": "img/VDCCURK4010.jpg"
     },
     {
         "category": "Rakhi with Nuts to India",
@@ -77,7 +77,7 @@
         "mrp": 850,
         "offer_price": 750,
         "description": "1 Rakhi With 250grams Nuts",
-        "image": "img/placeholder.jpg"
+        "image": "img/VDCCURK6010.jpg"
     },
     {
         "category": "Single Rakhi to Usa",
@@ -93,7 +93,7 @@
         "mrp": 1125,
         "offer_price": 1025,
         "description": "3 Beautiful Handcrafted Rakhis ",
-        "image": "img/placeholder.jpg"
+        "image": "img/VDCCURK5010.jpg"
     },
     {
         "category": "Rakhi with Sweets to Usa",
@@ -101,6 +101,6 @@
         "mrp": 1400,
         "offer_price": 1300,
         "description": "1 Rakhi With Sweets.",
-        "image": "img/placeholder.jpg"
+        "image": "img/VDCCURK4010.jpg"
     }
 ]

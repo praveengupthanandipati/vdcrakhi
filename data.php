@@ -187,6 +187,7 @@ function getDbConnection(): PDO
         referral_code VARCHAR(20) DEFAULT NULL,
         total_amount DECIMAL(10,2) NOT NULL,
         status VARCHAR(30) NOT NULL DEFAULT 'pending',
+        order_status VARCHAR(30) NOT NULL DEFAULT 'pending',
         payment_id VARCHAR(100) DEFAULT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
@@ -203,6 +204,12 @@ function getDbConnection(): PDO
         // Ignore if the column already exists.
     }
 
+    try {
+        $pdo->exec("ALTER TABLE orders ADD COLUMN order_status VARCHAR(30) NOT NULL DEFAULT 'pending' AFTER status");
+    } catch (Throwable $e) {
+        // Ignore if the column already exists.
+    }
+
     $pdo->exec("CREATE TABLE IF NOT EXISTS order_items (
         id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
         order_id INT UNSIGNED NOT NULL,
@@ -213,6 +220,18 @@ function getDbConnection(): PDO
         subtotal DECIMAL(10,2) NOT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         CONSTRAINT fk_order_items_order FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+
+    $pdo->exec("CREATE TABLE IF NOT EXISTS order_status_history (
+        id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+        order_id INT UNSIGNED NOT NULL,
+        old_status VARCHAR(30) NOT NULL,
+        new_status VARCHAR(30) NOT NULL,
+        note TEXT DEFAULT NULL,
+        changed_by VARCHAR(100) NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        INDEX idx_order_status_history_order (order_id),
+        CONSTRAINT fk_order_status_history_order FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
 
     return $pdo;
