@@ -251,6 +251,10 @@ a { text-decoration: none; }
 .hero-caption p { font-size: 1.05rem; opacity: .92; }
 .hero-swiper .swiper-pagination-bullet-active { background: var(--accent); }
 .hero-swiper .swiper-button-next, .hero-swiper .swiper-button-prev { color: #fff; }
+@media (max-width: 767.98px) {
+  /* Nav arrows sit on top of the caption text at this width; swipe gesture + dots are enough. */
+  .hero-swiper .swiper-button-next, .hero-swiper .swiper-button-prev { display: none; }
+}
 
 /* ---------- Section headings ---------- */
 .section-title { text-align: center; margin-bottom: 2.2rem; }
@@ -279,7 +283,7 @@ a { text-decoration: none; }
   padding: .25rem .6rem; border-radius: 20px; letter-spacing: .03em;
 }
 .product-card .body { padding: 1rem 1.1rem 1.2rem; display: flex; flex-direction: column; flex-grow: 1; }
-.product-card .cat { font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; color: var(--accent); font-weight: 600; }
+.product-card .cat { font-size: 1rem; text-transform: uppercase; letter-spacing: .05em; color: var(--accent); font-weight: 600; }
 .product-card h3 { font-size: 1rem; font-weight: 600; margin: .25rem 0 .4rem; color: var(--ink); font-family: 'Poppins', sans-serif; }
 .product-card .rating { color: var(--accent); font-size: .8rem; margin-bottom: .5rem; }
 .product-card .price-row { margin-top: auto; display: flex; align-items: center; gap: .5rem; margin-bottom: .7rem; }
@@ -355,7 +359,8 @@ a { text-decoration: none; }
 
 /* ---------- Footer ---------- */
 .site-footer { background: var(--navy); color: #f1e4cf; }
-.footer-logo-badge { background: #fff; border-radius: 10px; padding: .5rem .8rem; }
+.footer-logo-badge { background: #fff; border-radius: 10px; padding: .5rem .8rem; max-width: 100%; }
+.footer-logo-badge img { max-width: 100%; }
 .site-footer h6 { color: var(--accent-light); font-weight: 600; margin-bottom: 1rem; }
 .site-footer a { color: #f1e4cf; }
 .site-footer a:hover { color: var(--accent-light); }
@@ -373,6 +378,27 @@ a { text-decoration: none; }
 }
 .filter-btn.active, .filter-btn:hover { background: var(--primary); color: #fff; }
 .search-box { max-width: 320px; margin: 0 auto 2rem; }
+@media (max-width: 767.98px) {
+  /* A tall stack of full-width pills reads as a wall of buttons on phones;
+     a single scrollable row is the more compact, native-feeling pattern. */
+  .filter-bar {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x proximity;
+    padding: .25rem 2px .6rem;
+    margin-left: -4px;
+    margin-right: -4px;
+    scrollbar-width: none;
+  }
+  .filter-bar::-webkit-scrollbar { display: none; }
+  .filter-bar .filter-btn {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    scroll-snap-align: start;
+  }
+}
 
 /* ---------- Product detail ---------- */
 .detail-image img { width: 100%; border-radius: var(--radius); box-shadow: 0 8px 24px rgba(239,125,26,.15); }

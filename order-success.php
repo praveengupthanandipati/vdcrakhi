@@ -28,6 +28,12 @@ if ($orderId > 0) {
     $items = [];
 }
 
+$itemsSubtotal = 0.0;
+foreach ($items as $item) {
+    $itemsSubtotal += (float) $item['subtotal'];
+}
+$shippingFee = max(0, (float) ($order['total_amount'] ?? 0) - $itemsSubtotal);
+
 require __DIR__ . '/components/header.php';
 ?>
 
@@ -165,12 +171,14 @@ require __DIR__ . '/components/header.php';
                   <div class="p-3 rounded-4" style="background: #fff6ec; border: 1px solid #f2d8b3;">
                     <div class="d-flex justify-content-between mb-2">
                       <span>Subtotal</span>
-                      <strong>₹<?= number_format((float) ($order['total_amount'] ?? 0) - SHIPPING_FEE, 0) ?></strong>
+                      <strong>₹<?= number_format($itemsSubtotal, 0) ?></strong>
                     </div>
+                    <?php if ($shippingFee > 0): ?>
                     <div class="d-flex justify-content-between mb-2">
                       <span>Shipping</span>
-                      <strong>₹<?= number_format(SHIPPING_FEE, 0) ?></strong>
+                      <strong>₹<?= number_format($shippingFee, 0) ?></strong>
                     </div>
+                    <?php endif; ?>
                     <div class="d-flex justify-content-between pt-2 border-top">
                       <span>Total</span>
                       <strong class="text-primary">₹<?= number_format((float) ($order['total_amount'] ?? 0), 0) ?></strong>

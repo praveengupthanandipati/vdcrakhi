@@ -26,7 +26,7 @@ $activePage = $activePage ?? '';
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 <!-- Site CSS -->
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/style.css?v=<?= @filemtime(__DIR__ . '/../css/style.css') ?: time() ?>">
 <link rel="icon" href="img/fav.png" type="image/png">
 </head>
 <body class="page-loading">

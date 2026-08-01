@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (!$errors) {
         $subtotal = $product['offer_price'] * $qty;
-        $total    = $subtotal + SHIPPING_FEE;
+        $total    = $subtotal;
 
         try {
             $savedOrder = saveOrderToDatabase($f, $product, $qty, $subtotal, $total);
@@ -73,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'unit_price'    => (float) $product['offer_price'],
                 'qty'           => $qty,
                 'subtotal'      => (float) $subtotal,
-                'shipping_fee'  => (float) SHIPPING_FEE,
+                'shipping_fee'  => 0.0,
                 'total'         => (float) $total,
             ]);
             $emailResults = sendOrderEmails($order);
@@ -105,7 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $subtotal   = $product['offer_price'] * $qty;
-$total      = $subtotal + SHIPPING_FEE;
+$total      = $subtotal;
 $pageTitle  = 'Checkout | Vdesiconnect';
 $activePage = '';
 require __DIR__ . '/components/header.php';
@@ -255,16 +255,12 @@ require __DIR__ . '/components/header.php';
 
             <div class="order-line">
               <label for="qty" class="mb-0">Quantity</label>
-              <input type="number" class="form-control qty-input" id="qty" name="qty" min="1" max="10" value="<?= $qty ?>" data-unit-price="<?= $product['offer_price'] ?>" data-shipping="<?= SHIPPING_FEE ?>">
+              <input type="number" class="form-control qty-input" id="qty" name="qty" min="1" max="10" value="<?= $qty ?>" data-unit-price="<?= $product['offer_price'] ?>">
             </div>
 
             <div class="order-line">
               <strong>Subtotal</strong>
               <strong id="subtotalDisplay"><?= formatPrice($subtotal) ?></strong>
-            </div>
-            <div class="order-line">
-              <strong>Shipment</strong>
-              <span>Standard shipping: <?= formatPrice(SHIPPING_FEE) ?></span>
             </div>
             <div class="order-line order-total">
               <strong>Total</strong>
@@ -295,6 +291,30 @@ require __DIR__ . '/components/header.php';
     </form>
   </div>
 </section>
+
+<!-- Shown while the order is being placed (order save + payment setup can take a few seconds) -->
+<div id="checkoutLoader" class="page-loader page-loader-hidden" role="status" aria-label="Placing your order">
+  <div class="page-loader-inner">
+    <img src="img/logo.png" alt="" class="page-loader-logo">
+    <span class="page-loader-ring" aria-hidden="true"></span>
+    <p class="page-loader-text">Placing your order &amp; preparing secure payment&hellip;</p>
+  </div>
+</div>
+<script>
+  (function () {
+    var form = document.getElementById('checkoutForm');
+    var loader = document.getElementById('checkoutLoader');
+    if (!form || !loader) return;
+    form.addEventListener('submit', function () {
+      loader.classList.remove('page-loader-hidden');
+      var btn = form.querySelector('button[type="submit"]');
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Placing your order…';
+      }
+    });
+  })();
+</script>
 
 <?php if ($paymentReady): ?>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>

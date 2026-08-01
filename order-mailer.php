@@ -22,6 +22,10 @@ function buildInvoiceHtml(array $order): string
         ? '<br>' . mailEscape($order['company'])
         : '';
 
+    $shippingRow = $order['shipping_fee'] > 0
+        ? '<tr><td colspan="3" class="amount">Standard shipping</td><td class="amount">' . formatMailPrice($order['shipping_fee']) . '</td></tr>'
+        : '';
+
     return '<!doctype html>
 <html lang="en">
 <head>
@@ -57,7 +61,7 @@ function buildInvoiceHtml(array $order): string
     <thead><tr><th>Item</th><th>Qty</th><th class="amount">Unit price</th><th class="amount">Amount</th></tr></thead>
     <tbody>
       <tr><td>' . mailEscape($order['product_name']) . '</td><td>' . (int) $order['qty'] . '</td><td class="amount">' . formatMailPrice($order['unit_price']) . '</td><td class="amount">' . formatMailPrice($order['subtotal']) . '</td></tr>
-      <tr><td colspan="3" class="amount">Standard shipping</td><td class="amount">' . formatMailPrice($order['shipping_fee']) . '</td></tr>
+      ' . $shippingRow . '
       <tr class="total"><td colspan="3" class="amount">Total</td><td class="amount">' . formatMailPrice($order['total']) . '</td></tr>
     </tbody>
   </table>
@@ -102,11 +106,13 @@ function buildInvoicePdf(array $order): string
         'Quantity: ' . (int) $order['qty'],
         'Unit price: INR ' . number_format((float) $order['unit_price'], 0),
         'Subtotal: INR ' . number_format((float) $order['subtotal'], 0),
-        'Standard shipping: INR ' . number_format((float) $order['shipping_fee'], 0),
-        'TOTAL: INR ' . number_format((float) $order['total'], 0),
-        '',
-        'Payment status: Pending',
     ];
+    if ($order['shipping_fee'] > 0) {
+        $lines[] = 'Standard shipping: INR ' . number_format((float) $order['shipping_fee'], 0);
+    }
+    $lines[] = 'TOTAL: INR ' . number_format((float) $order['total'], 0);
+    $lines[] = '';
+    $lines[] = 'Payment status: Pending';
 
     $content = "BT\n/F1 12 Tf\n50 790 Td\n17 TL\n";
     foreach ($lines as $line) {
@@ -153,7 +159,7 @@ function buildCustomerOrderEmail(array $order): string
         . '<div style="background:#faf6f2;border-left:4px solid #d6a24a;padding:16px;margin:22px 0">'
         . '<strong>' . mailEscape($order['product_name']) . '</strong> &times; ' . (int) $order['qty']
         . '<span style="float:right;font-weight:bold">' . formatMailPrice($order['total']) . '</span><br>'
-        . '<span style="color:#706767;font-size:13px">Includes standard shipping</span></div>'
+        . '<span style="color:#706767;font-size:13px">Free shipping included</span></div>'
         . '<p>Your invoice is attached as a PDF file.</p>'
         . '<p style="margin-bottom:0">Questions? Reply to this email and include your order number.</p>'
         . '</div><p style="text-align:center;color:#817676;font-size:12px">Vdesiconnect &bull; Raksha Bandhan gifts delivered with care</p>'

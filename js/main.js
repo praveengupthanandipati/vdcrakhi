@@ -51,7 +51,6 @@ function initCheckoutPage() {
   const qtyInput = document.getElementById('qty');
   if (qtyInput) {
     const unitPrice = parseFloat(qtyInput.dataset.unitPrice);
-    const shipping = parseFloat(qtyInput.dataset.shipping);
     const qtyDisplay = document.getElementById('qtyDisplay');
     const lineTotal = document.getElementById('lineTotal');
     const subtotalDisplay = document.getElementById('subtotalDisplay');
@@ -63,7 +62,7 @@ function initCheckoutPage() {
       if (qtyDisplay) qtyDisplay.textContent = qty;
       if (lineTotal) lineTotal.textContent = '₹' + subtotal.toLocaleString('en-IN');
       if (subtotalDisplay) subtotalDisplay.textContent = '₹' + subtotal.toLocaleString('en-IN');
-      if (totalDisplay) totalDisplay.textContent = '₹' + (subtotal + shipping).toLocaleString('en-IN');
+      if (totalDisplay) totalDisplay.textContent = '₹' + subtotal.toLocaleString('en-IN');
     });
   }
 

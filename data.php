@@ -79,9 +79,12 @@ function formatPrice($amount) {
 // define('RAZORPAY_KEY_ID', '');
 // define('RAZORPAY_KEY_SECRET', '');
 
-define('RAZORPAY_LINK', 'https://razorpay.me/@elitemart4120');
-define('RAZORPAY_KEY_ID', 'rzp_test_TFqDGMRwEytZqP');
-define('RAZORPAY_KEY_SECRET', 'AJAn4LJKAQ7fHC0KVfKg3n63');
+// define('RAZORPAY_LINK', 'https://razorpay.me/@elitemart4120');
+define('RAZORPAY_LINK', 'razorpay.me/@elitemart1677');
+// define('RAZORPAY_KEY_ID', 'rzp_test_TFqDGMRwEytZqP'); //test key
+define('RAZORPAY_KEY_ID', 'rzp_live_TKWbZv8Fq9svGe'); //live key
+// define('RAZORPAY_KEY_SECRET', 'AJAn4LJKAQ7fHC0KVfKg3n63'); // test secret
+define('RAZORPAY_KEY_SECRET', 'ck3MdENB4qdelYhu76ED2RTJ');
 
 define('SHIPPING_FEE', 45);
 define('DB_HOST', 'localhost');

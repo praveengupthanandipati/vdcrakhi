@@ -25,7 +25,8 @@ require __DIR__ . '/components/header.php';
             <span class="feature-icon"><i class="bi bi-telephone-fill"></i></span>
             <div>
               <h6>Phone</h6>
-              <p>+91 91003 11263</p>
+              <p>+91 91003 11263 (India)</p>
+              <p>+1 623 265 9209 (USA)</p>
             </div>
           </div>
           <div class="contact-info-item">
