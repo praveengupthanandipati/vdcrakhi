@@ -272,7 +272,7 @@ require __DIR__ . '/components/header.php';
               <p class="small text-muted mb-0">Pay securely by Credit or Debit card or Internet Banking through Razorpay.</p>
             </div>
 
-            <p class="small text-muted mt-3">Your personal data will be used to process your order, support your experience throughout this website, and for other purposes described in our <a href="#">privacy policy</a>.</p>
+            <!-- <p class="small text-muted mt-3">Your personal data will be used to process your order, support your experience throughout this website, and for other purposes described in our <a href="#">privacy policy</a>.</p> -->
 
             <?php if ($paymentReady): ?>
               <div class="alert alert-info small mt-2" role="alert">A Razorpay payment window will open shortly. If it does not appear, use the button below.</div>
