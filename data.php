@@ -11,9 +11,13 @@ $categories = [
     'rakhi-chocolate-india' => 'Rakhi with Chocolate to India',
     'rakhi-sweets-india'    => 'Rakhi with Sweets to India',
     'rakhi-nuts-india'      => 'Rakhi with Nuts to India',
-    'single-rakhi-usa'      => 'Single Rakhi to Usa',
+    'resin-rakhi-india'     => 'Resin Rakhi to India',
+    'single-rakhi-usa'      => 'Single Rakhi to USA',
     'multiple-rakhi-usa'    => 'Multiple Rakhi to Usa',
-    'rakhi-sweets-usa'      => 'Rakhi with Sweets to Usa',
+    'rakhi-chocolate-usa'   => 'Rakhi with Chocolate to USA',
+    'rakhi-sweets-usa'      => 'Rakhi with Sweets to USA',
+    'rakhi-nuts-usa'        => 'Rakhi with Nuts to USA',
+    'resin-rakhi-usa'       => 'Resin Rakhi to USA',
 ];
 $categorySlugsByLabel = array_flip($categories);
 

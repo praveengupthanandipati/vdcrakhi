@@ -4,7 +4,7 @@ $pageTitle  = 'Vdesiconnect | Rakhi Festival — Celebrate the Bond of Love';
 $activePage = 'home';
 require __DIR__ . '/components/header.php';
 
-$featured = $products;
+$featured = array_slice($products, 0, 30); // 5 rows x 6 per row (lg breakpoint)
 $gifts    = array_values(array_filter($products, fn($p) => in_array($p['category'], ['rakhi-chocolate-india', 'rakhi-sweets-india', 'rakhi-nuts-india', 'rakhi-sweets-usa'])));
 
 $heroSlides = [
@@ -81,7 +81,7 @@ $heroSlides = [
       <?php endforeach; ?>
     </div>
     <div class="text-center mt-4" data-aos="fade-up">
-      <a href="product-list.php" class="btn btn-maroon">View All Rakhis</a>
+      <a href="product-list.php" class="btn btn-maroon">Show More</a>
     </div>
   </div>
 </section>
@@ -97,20 +97,24 @@ $heroSlides = [
     <div class="row g-4">
       <?php
       $icons = [
-          'single-rakhi-india'    => 'bi-flower2',
-          'multiple-rakhis-india' => 'bi-collection',
-          'rakhi-chocolate-india' => 'bi-gift',
-          'rakhi-sweets-india'    => 'bi-cup-straw',
-          'rakhi-nuts-india'      => 'bi-basket2',
-          'single-rakhi-usa'      => 'bi-flower3',
+          'single-rakhi-india'    => 'bi-flower1',
+          'multiple-rakhis-india' => 'bi-collection-fill',
+          'rakhi-chocolate-india' => 'bi-gift-fill',
+          'rakhi-sweets-india'    => 'bi-cup-hot-fill',
+          'rakhi-nuts-india'      => 'bi-basket3-fill',
+          'resin-rakhi-india'     => 'bi-gem',
+          'single-rakhi-usa'      => 'bi-flower2',
           'multiple-rakhi-usa'    => 'bi-stack',
-          'rakhi-sweets-usa'      => 'bi-cup-hot',
+          'rakhi-chocolate-usa'   => 'bi-gift',
+          'rakhi-sweets-usa'      => 'bi-cup-straw',
+          'rakhi-nuts-usa'        => 'bi-basket3',
+          'resin-rakhi-usa'       => 'bi-gem',
       ];
       foreach ($categories as $key => $label): ?>
       <div class="col-6 col-md-4 col-lg-2" data-aos="zoom-in">
         <a href="product-list.php?category=<?= $key ?>" class="text-decoration-none">
           <div class="category-card">
-            <div class="icon-circle"><i class="bi <?= $icons[$key] ?>"></i></div>
+            <div class="icon-circle"><i class="bi <?= $icons[$key] ?? 'bi-gift-fill' ?>"></i></div>
             <h4><?= $label ?></h4>
           </div>
         </a>
